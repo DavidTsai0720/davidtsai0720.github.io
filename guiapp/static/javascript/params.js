@@ -1,0 +1,16 @@
+const variable = {
+    click: "Click On",
+    time: "Event Time(ms)",
+    hard: "ID",
+    model: "Model",
+    user: "Participants",
+    trail: "Trail",
+    start: "Start",
+    end: "Target",
+    fail: "Else",
+    duration: "duration",
+    valid_fail: "valid_fail",
+    invalid_fail: "invalid_fail",
+    reason: "reason",
+    total: "total",
+};
