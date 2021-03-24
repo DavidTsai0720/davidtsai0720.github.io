@@ -11,11 +11,43 @@
 <script src="static/javascript/helperHandleFile.js"></script>
 <script src="static/javascript/handleInstruction.js"></script>
 <script src="static/javascript/handleFile.js"></script>
+<script src="static/javascript/handleSelect.js"></script>
+<script src="static/javascript/handleMethod.js"></script>
 <script>
+    const select = Select.main;
+    const funcMap = new Map([
+        ["main-methods", select],
+        ["exclude", select],
+        ["select-action", select],
+        ["remove-all", select],
+        ["recovery-all", select],
+        ["exclude-data", select],
+        ["integrity-check", select],
+        ["outlier", select],
+        ["error-rate", select],
+        ["error-time", select],
+        ["correct", select],
+        ["overall", select],
+        ["details", select],
+        ["more-details", select],
+        ["error-rate", methods],
+        ["error-time", methods],
+        ["overall", methods],
+        ["correct", methods],
+        ["outlier", methods],
+        ["integrity-check", methods],
+        ["current-exclude", methods],
+    ]);
     window.onload = function() {
         const mainMethods = document.querySelector("div[name=main-methods]");
-        const instruction = document.querySelector("div[name=instruction]");
-        const results = document.querySelector("div[name=hint]");
+        document.addEventListener("click", function(e) {
+            const name = e.target.attributes.name.nodeValue;
+            if ( name ) {
+                Tools.removeActive(e);
+                const func = funcMap.get(name);
+                func(name, e);
+            }
+        });
     }
 </script>
 </head>

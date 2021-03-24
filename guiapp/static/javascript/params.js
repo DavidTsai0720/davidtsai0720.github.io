@@ -9,8 +9,8 @@ const variable = {
     end: "Target",
     fail: "Else",
     duration: "duration",
-    valid_fail: "valid_fail",
-    invalid_fail: "invalid_fail",
+    validFail: "valid_fail",
+    invalidFail: "invalid_fail",
     reason: "reason",
     total: "total",
 };
