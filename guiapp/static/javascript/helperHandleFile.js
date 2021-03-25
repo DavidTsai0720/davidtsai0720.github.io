@@ -219,11 +219,12 @@ class Source {
                 }
             }
         }
-        return fillRequireInfo(new Map([
+        window.source = fillRequireInfo(new Map([
             ["invalid", invalid],
             ["valid", valid],
             ["excluded", new Map()]
         ]), data)
+        return ;
     }
 
     static get models () {
