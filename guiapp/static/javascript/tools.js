@@ -18,7 +18,7 @@ class Display {
     }
 
     static leftBar ( text ) {
-        this.show("left_bar", text);
+        this.show("left-bar", text);
     }
 
     static title ( text ) {
@@ -30,7 +30,7 @@ class Display {
     }
 
     static result ( text ) {
-        this.show("sub_results", text);
+        this.show("sub-results", text);
     }
 }
 
@@ -185,17 +185,15 @@ class Table {
 }
 
 function isExcluded( element ) {
-    const excluded = window.source.get("excluded");
-    if ( !excluded ) {
+    if ( !Source.excluded ) {
         return false;
     }
     const model = element.get(variable.model); 
-    if ( !excluded.has(model) ) {
+    if ( !Source.excluded.has(model) ) {
         return false;
     }
-    const excludedUsers = excluded.get(model);
     const user = element.get(variable.user);
-    return excludedUsers.has(user);
+    return Source.excluded.get(model).has(user);
 }
 
 function* getDataFromSource(key) {

@@ -225,4 +225,32 @@ class Source {
             ["excluded", new Map()]
         ]), data)
     }
+
+    static get models () {
+        return window.source.get(variable.model);
+    }
+
+    static get users () {
+        return window.source.get(variable.user);
+    }
+
+    static get hard () {
+        return window.source.get(variable.hard);
+    }
+
+    static get trails () {
+        return window.source.get(variable.trail);
+    }
+
+    static get valid () {
+        return window.source.get("valid");
+    }
+
+    static get invalid () {
+        return window.source.get("invalid");
+    }
+
+    static get excluded () {
+        return window.source.get("excluded");
+    }
 }
