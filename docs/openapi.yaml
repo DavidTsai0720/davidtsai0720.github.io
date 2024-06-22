@@ -1,0 +1,323 @@
+openapi: "3.0.3"
+info:
+  title: Images Service
+  version: 1.0.0
+  description: Image Service API
+
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+paths:
+  /images:
+    post:
+      description: create an image training task
+      tags:
+        - External Image Service
+      requestBody:
+        description: create an image training task
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateImageRequest"
+      responses:
+        "201":
+          description: create an image training task successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateImageResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+    get:
+      description: list images status
+      tags:
+        - External Image Service
+      parameters:
+        - in: query
+          name: offset
+          required: false
+          schema:
+            $ref: "#/components/schemas/Offset"
+        - in: query
+          name: limit
+          required: false
+          schema:
+            $ref: "#/components/schemas/Limit"
+        - in: query
+          name: status
+          required: false
+          schema:
+            $ref: "#/components/schemas/Status"
+        - in: query
+          name: name
+          required: false
+          schema:
+            $ref: "#/components/schemas/ImageName"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListImageResponse"
+          headers:
+            X-Total-Count:
+              $ref: "#/components/headers/X-Total-Count"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+  /images/{uid}:
+    get:
+      description: retrieve an image training result
+      tags:
+        - External Image Service
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          schema:
+            $ref: "#/components/schemas/ImageUID"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetImageResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+    delete:
+      description: cancel an image training task
+      tags:
+        - External Image Service
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          schema:
+            $ref: "#/components/schemas/ImageUID"
+      responses:
+        "204":
+          description: cancel an image training task successfully
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+  /images/{uid}/{id}:
+    put:
+      description: update sub task result
+      tags:
+        - Internal Image Service
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          schema:
+            $ref: "#/components/schemas/ImageUID"
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: "#/components/schemas/BlockID"
+      requestBody:
+        description: update sub task result
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PutImageResultRequest"
+      responses:
+        "204":
+          description: update an image training result successfully
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+
+components:
+  schemas:
+    Offset:
+      type: integer
+      description: offset
+      example: 0
+    Limit:
+      type: integer
+      description: limit
+      example: 10
+    ImageUID:
+      type: string
+      description: uid
+      example: "00000000-0000-0000-0000-000000000001"
+    BlockID:
+      type: integer
+      description: block id
+      example: 1
+    Status:
+      type: string
+      description: status
+      example: "processing"
+      enum:
+        - processing
+        - done
+        - canceled
+    ImageName:
+      type: string
+      description: name
+      example: "HelloWorld.jpg"
+    ImageResult:
+      type: boolean
+      description: result
+      example: true
+    PutImageResultRequest:
+      type: object
+      properties:
+        result:
+          $ref: "#/components/schemas/ImageResult"
+    CreateImageRequest:
+      type: object
+      properties:
+        name:
+          $ref: "#/components/schemas/ImageName"
+    CreateImageResponse:
+      type: object
+      properties:
+        uid:
+          $ref: "#/components/schemas/ImageUID"
+    ListImageResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          uid:
+            $ref: "#/components/schemas/ImageUID"
+          name:
+            $ref: "#/components/schemas/ImageName"
+          status:
+            $ref: "#/components/schemas/Status"
+    GetImageResponse:
+      type: object
+      properties:
+        uid:
+          $ref: "#/components/schemas/ImageUID"
+        name:
+          $ref: "#/components/schemas/ImageName"
+        status:
+          $ref: "#/components/schemas/Status"
+        result:
+          $ref: "#/components/schemas/ImageResult"
+    ErrorMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "error message"
+        code:
+          type: integer
+          description: error code
+          example: 1000
+  headers:
+    X-Total-Count:
+      schema:
+        type: integer
+      description: total count
+      required: true
+      example: 10
