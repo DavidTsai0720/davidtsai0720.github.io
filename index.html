@@ -1,12 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documents</title>
-</head>
-<body>
-    <h1>This is david's home page.</h1>
-</body>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="SwaggerIU" />
+        <title>SwaggerUI</title>
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/swagger-ui-dist@4.4.1/swagger-ui.css"
+        />
+    </head>
+    <body>
+        <div id="swagger-ui"></div>
+        <script
+            src="https://unpkg.com/swagger-ui-dist@4.4.1/swagger-ui-bundle.js"
+            crossorigin
+        ></script>
+        <script
+            src="https://unpkg.com/swagger-ui-dist@4.4.1/swagger-ui-standalone-preset.js"
+            crossorigin
+        ></script>
+        <script>
+            window.onload = () => {
+                window.ui = SwaggerUIBundle({
+                    url: "https://dtsai720.github.io/docs/openapi.yaml",
+                });
+            };
+        </script>
+    </body>
 </html>
