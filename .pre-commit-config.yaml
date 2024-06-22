@@ -13,9 +13,3 @@ repos:
     rev: "v4.0.0-alpha.8"
     hooks:
       - id: prettier
-
-  - repo: https://github.com/thlorenz/doctoc
-    rev: v2.2.0
-    hooks:
-      - id: doctoc
-        files: .+.md
