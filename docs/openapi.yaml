@@ -1,16 +1,25 @@
 openapi: "3.0.3"
 info:
-  title: Images Service
+  title: Images Server
   version: 1.0.0
-  description: Image Service API
+  description: |
+    This is the Images Server API documentation.
+    It provides the following functionalities:
+    - Create an image training task
+    - List images status
+    - Retrieve an image training result
+    - Cancel an image training task
+    - Update sub task result
 
 servers:
   - url: http://localhost:8080
-    description: Local server
+    description: Local Server
 
 paths:
   /images:
     post:
+      security:
+        - Authorization: []
       description: create an image training task
       tags:
         - External Image Service
@@ -52,6 +61,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorMessage"
     get:
+      security:
+        - Authorization: []
       description: list images status
       tags:
         - External Image Service
@@ -72,7 +83,7 @@ paths:
           schema:
             $ref: "#/components/schemas/Status"
         - in: query
-          name: name
+          name: path
           required: false
           schema:
             $ref: "#/components/schemas/ImageName"
@@ -106,6 +117,8 @@ paths:
                 $ref: "#/components/schemas/ErrorMessage"
   /images/{uid}:
     get:
+      security:
+        - Authorization: []
       description: retrieve an image training result
       tags:
         - External Image Service
@@ -147,6 +160,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorMessage"
     delete:
+      security:
+        - Authorization: []
       description: cancel an image training task
       tags:
         - External Image Service
@@ -234,6 +249,11 @@ paths:
                 $ref: "#/components/schemas/ErrorMessage"
 
 components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Offset:
       type: integer
@@ -262,7 +282,7 @@ components:
     ImageName:
       type: string
       description: name
-      example: "HelloWorld.jpg"
+      example: "/data/images/hello_world.jpg"
     ImageResult:
       type: boolean
       description: result
@@ -275,7 +295,7 @@ components:
     CreateImageRequest:
       type: object
       properties:
-        name:
+        path:
           $ref: "#/components/schemas/ImageName"
     CreateImageResponse:
       type: object
@@ -289,7 +309,7 @@ components:
         properties:
           uid:
             $ref: "#/components/schemas/ImageUID"
-          name:
+          path:
             $ref: "#/components/schemas/ImageName"
           status:
             $ref: "#/components/schemas/Status"
@@ -298,7 +318,7 @@ components:
       properties:
         uid:
           $ref: "#/components/schemas/ImageUID"
-        name:
+        path:
           $ref: "#/components/schemas/ImageName"
         status:
           $ref: "#/components/schemas/Status"
