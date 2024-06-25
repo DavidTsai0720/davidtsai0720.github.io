@@ -1,28 +1,20 @@
 openapi: "3.0.3"
 info:
-  title: Images Server
+  title: Image Training Server
   version: 1.0.0
-  description: |
-    This is the Images Server API documentation.
-    It provides the following functionalities:
-    - Create an image training task
-    - List images status
-    - Retrieve an image training result
-    - Cancel an image training task
-    - Update sub task result
 
 servers:
   - url: http://localhost:8080
     description: Local Server
 
 paths:
-  /images:
+  /training:
     post:
       security:
         - Authorization: []
       description: create an image training task
       tags:
-        - External Image Service
+        - External Image Training Service
       requestBody:
         description: create an image training task
         content:
@@ -48,6 +40,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorMessage"
+        "404":
+          description: Image Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
         "409":
           description: Conflict
           content:
@@ -60,12 +58,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorMessage"
+  /training/result:
     get:
+      description: list images status
       security:
         - Authorization: []
-      description: list images status
       tags:
-        - External Image Service
+        - External Image Training Service
       parameters:
         - in: query
           name: offset
@@ -83,7 +82,7 @@ paths:
           schema:
             $ref: "#/components/schemas/Status"
         - in: query
-          name: path
+          name: image
           required: false
           schema:
             $ref: "#/components/schemas/ImageName"
@@ -115,13 +114,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorMessage"
-  /images/{uid}:
+  /training/result/{uid}:
     get:
+      description: retrieve an image training result
       security:
         - Authorization: []
-      description: retrieve an image training result
       tags:
-        - External Image Service
+        - External Image Training Service
       parameters:
         - in: path
           name: uid
@@ -159,12 +158,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorMessage"
+  /training/{uid}:
     delete:
       security:
         - Authorization: []
       description: cancel an image training task
       tags:
-        - External Image Service
+        - External Image Training Service
       parameters:
         - in: path
           name: uid
@@ -198,11 +198,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorMessage"
-  /images/{uid}/{id}:
+  /training/result/{uid}/{id}:
     put:
       description: update sub task result
       tags:
-        - Internal Image Service
+        - Internal Image Training Service
       parameters:
         - in: path
           name: uid
@@ -237,6 +237,47 @@ paths:
                 $ref: "#/components/schemas/ErrorMessage"
         "409":
           description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+  /training/status/{uid}/{id}:
+    get:
+      description: retrieve an image training status
+      tags:
+        - Internal Image Training Service
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          schema:
+            $ref: "#/components/schemas/ImageUID"
+        - in: path
+          name: id
+          required: true
+          schema:
+            $ref: "#/components/schemas/BlockID"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetImageStatusResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "404":
+          description: Not found
           content:
             application/json:
               schema:
@@ -295,7 +336,7 @@ components:
     CreateImageRequest:
       type: object
       properties:
-        path:
+        image:
           $ref: "#/components/schemas/ImageName"
     CreateImageResponse:
       type: object
@@ -309,16 +350,23 @@ components:
         properties:
           uid:
             $ref: "#/components/schemas/ImageUID"
-          path:
+          image:
             $ref: "#/components/schemas/ImageName"
           status:
             $ref: "#/components/schemas/Status"
+    GetImageStatusResponse:
+      type: object
+      properties:
+        uid:
+          $ref: "#/components/schemas/ImageUID"
+        status:
+          $ref: "#/components/schemas/Status"
     GetImageResponse:
       type: object
       properties:
         uid:
           $ref: "#/components/schemas/ImageUID"
-        path:
+        image:
           $ref: "#/components/schemas/ImageName"
         status:
           $ref: "#/components/schemas/Status"
