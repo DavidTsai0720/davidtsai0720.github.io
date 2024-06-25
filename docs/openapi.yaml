@@ -58,9 +58,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorMessage"
-  /training/result:
     get:
-      description: list images status
+      description: list images information
       security:
         - Authorization: []
       tags:
@@ -278,6 +277,12 @@ paths:
                 $ref: "#/components/schemas/ErrorMessage"
         "404":
           description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+        "409":
+          description: Conflict
           content:
             application/json:
               schema:
